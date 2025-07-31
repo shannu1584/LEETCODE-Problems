@@ -1,0 +1,15 @@
+class Solution(object):
+    def subarrayBitwiseORs(self, arr):
+        """
+        :type arr: List[int]
+        :rtype: int
+        """
+        res = set()     # To store all unique OR results
+        curr = set()    # OR results ending at the current element
+
+        for num in arr:
+            # For each element, compute new ORs by extending all previous subarrays
+            curr = {num | x for x in curr} | {num}
+            res |= curr  # Add all current ORs to the result set
+
+        return len(res)
