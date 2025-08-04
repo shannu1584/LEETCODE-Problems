@@ -1,0 +1,26 @@
+class Solution(object):
+    def totalFruit(self, fruits):
+        """
+        :type fruits: List[int]
+        :rtype: int
+        """
+        from collections import defaultdict
+
+        basket = defaultdict(int)  # To keep count of fruit types
+        left = 0  # Start of the window
+        max_fruits = 0  # Result variable
+
+        for right in range(len(fruits)):
+            basket[fruits[right]] += 1  # Add current fruit to the basket
+
+            # If we have more than 2 types, shrink the window from the left
+            while len(basket) > 2:
+                basket[fruits[left]] -= 1
+                if basket[fruits[left]] == 0:
+                    del basket[fruits[left]]
+                left += 1  # Shrink the window
+
+            # Update max_fruits with the size of the current valid window
+            max_fruits = max(max_fruits, right - left + 1)
+
+        return max_fruits
