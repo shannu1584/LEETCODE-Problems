@@ -1,0 +1,16 @@
+class Solution:
+    def numOfUnplacedFruits(self, fruits, baskets):
+        n = len(fruits)
+        used = [False] * n  # To track used baskets
+        unplaced = 0
+
+        for i in range(n):  # For each fruit
+            placed = False
+            for j in range(n):  # Look for suitable basket
+                if not used[j] and baskets[j] >= fruits[i]:
+                    used[j] = True
+                    placed = True
+                    break
+            if not placed:
+                unplaced += 1
+        return unplaced
