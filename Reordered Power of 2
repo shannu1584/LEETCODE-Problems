@@ -1,0 +1,13 @@
+class Solution(object):
+    def reorderedPowerOf2(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        from collections import Counter
+        count = Counter(str(n))
+        for i in range(60):
+            power_of_2 = str(1 << i)
+            if Counter(power_of_2) == count:
+                return True
+        return False
