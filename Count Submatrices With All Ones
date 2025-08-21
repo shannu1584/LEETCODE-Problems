@@ -1,0 +1,29 @@
+from typing import List
+
+class Solution:
+    def numSubmat(self, mat: List[List[int]]) -> int:
+        m, n = len(mat), len(mat[0])
+        res = 0
+        
+        # Step 1: Build histogram heights
+        for i in range(m):
+            for j in range(n):
+                if mat[i][j] == 1 and i > 0:
+                    mat[i][j] += mat[i-1][j]
+        
+        # Step 2: For each row, count rectangles using monotonic stack
+        for row in mat:
+            stack = []
+            sum_row = [0] * n
+            for j in range(n):
+                while stack and row[stack[-1]] >= row[j]:
+                    stack.pop()
+                if stack:
+                    prev = stack[-1]
+                    sum_row[j] = sum_row[prev] + row[j] * (j - prev)
+                else:
+                    sum_row[j] = row[j] * (j + 1)
+                res += sum_row[j]
+                stack.append(j)
+        
+        return res
