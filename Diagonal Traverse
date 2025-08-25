@@ -1,0 +1,42 @@
+class Solution(object):
+    def findDiagonalOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        direction = 1
+        res = []
+        M = len(matrix)
+        if M == 0:
+            return res
+        N = len(matrix[0])
+        if N == 0:
+            return res
+        count = M*N
+        m = 0
+        n = 0
+        while count > 0:
+            count -= 1
+            res.append(matrix[m][n])
+            if direction == 1:
+                if m == 0 and n != N-1:
+                    n += 1
+                    direction = 0
+                elif n == N-1:
+                    m += 1
+                    direction = 0
+                else:
+                    n += 1
+                    m -= 1
+            elif direction == 0:
+                if n == 0 and m != M-1:
+                    m += 1
+                    direction = 1
+                elif m == M-1:
+                    n += 1
+                    direction = 1
+                else:
+                    n -= 1
+                    m += 1
+                    
+        return res
