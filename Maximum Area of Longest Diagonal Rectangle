@@ -1,0 +1,22 @@
+class Solution(object):
+    def areaOfMaxDiagonal(self, dimensions):
+        """
+        :type dimensions: List[List[int]]
+        :rtype: int
+        """
+        max_diag = -1
+        max_area = -1
+
+        for length, width in dimensions:
+            # diagonal length using Pythagoras theorem
+            diag = math.sqrt(length * length + width * width)
+            area = length * width
+
+            if diag > max_diag:
+                max_diag = diag
+                max_area = area
+            elif diag == max_diag:
+                # if diagonal is same, pick rectangle with larger area
+                max_area = max(max_area, area)
+
+        return max_area
