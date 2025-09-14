@@ -1,0 +1,46 @@
+class Solution:
+    def spellchecker(self, wordlist: list[str], queries: list[str]) -> list[str]:
+        # Store original words for exact matches
+        exact_match = set(wordlist)
+
+        # Store lowercase versions for case-insensitive matches
+        lower_case_map = {}
+        for word in wordlist:
+            lower_word = word.lower()
+            if lower_word not in lower_case_map:
+                lower_case_map[lower_word] = word
+
+        # Store vowel-insensitive versions for vowel error matches
+        vowel_insensitive_map = {}
+        def devowel(word: str) -> str:
+            vowels = "aeiou"
+            return "".join(['*' if c.lower() in vowels else c.lower() for c in word])
+
+        for word in wordlist:
+            devoweled_word = devowel(word)
+            if devoweled_word not in vowel_insensitive_map:
+                vowel_insensitive_map[devoweled_word] = word
+
+        results = []
+        for query in queries:
+            # 1. Exact match
+            if query in exact_match:
+                results.append(query)
+                continue
+
+            # 2. Case-insensitive match
+            lower_query = query.lower()
+            if lower_query in lower_case_map:
+                results.append(lower_case_map[lower_query])
+                continue
+
+            # 3. Vowel-insensitive match
+            devoweled_query = devowel(query)
+            if devoweled_query in vowel_insensitive_map:
+                results.append(vowel_insensitive_map[devoweled_query])
+                continue
+
+            # 4. No match
+            results.append("")
+
+        return results
