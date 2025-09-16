@@ -1,0 +1,27 @@
+#include <vector>
+#include <numeric> // For std::gcd and std::lcm
+
+class Solution {
+public:
+    std::vector<int> replaceNonCoprimes(std::vector<int>& nums) {
+        std::vector<int> ans; // This will act as our stack
+        for (int num : nums) {
+            // While there are elements in 'ans' and the current 'num' is non-coprime with the last element
+            while (!ans.empty() && std::gcd(ans.back(), num) > 1) {
+                // Replace them with their LCM
+                num = std::lcm(ans.back(), num);
+                ans.pop_back(); // Remove the last element
+            }
+            ans.push_back(num); // Add the (potentially new) number to the result
+        }
+        return ans;
+    }
+
+private:
+    // Helper function for LCM, as std::lcm might not be available in older C++ standards
+    // or on all platforms. If using C++17 or later, std::lcm is preferred.
+    long long calculate_lcm(long long a, long long b) {
+        if (a == 0 || b == 0) return 0;
+        return (a / std::gcd(a, b)) * b;
+    }
+};
