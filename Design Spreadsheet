@@ -1,0 +1,33 @@
+class Spreadsheet:
+    def __init__(self, rows: int):
+        self.rows = rows
+        self.cells = {}  # (row, col) -> value
+
+    def _parse_cell(self, cell: str):
+        """Convert cell reference like 'B2' into (row, col) tuple."""
+        col = ord(cell[0]) - ord('A')  # 'A'->0, 'B'->1, ...
+        row = int(cell[1:]) - 1        # convert to 0-based
+        return (row, col)
+
+    def setCell(self, cell: str, value: int) -> None:
+        row, col = self._parse_cell(cell)
+        self.cells[(row, col)] = value
+
+    def resetCell(self, cell: str) -> None:
+        row, col = self._parse_cell(cell)
+        self.cells[(row, col)] = 0
+
+    def _get_operand_value(self, token: str) -> int:
+        """Return integer value for operand (either number or cell)."""
+        if token[0].isalpha():  # cell reference
+            row, col = self._parse_cell(token)
+            return self.cells.get((row, col), 0)
+        else:  # integer
+            return int(token)
+
+    def getValue(self, formula: str) -> int:
+        formula = formula[1:]  # remove '='
+        x, y = formula.split('+')
+        val1 = self._get_operand_value(x)
+        val2 = self._get_operand_value(y)
+        return val1 + val2
