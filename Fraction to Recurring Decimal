@@ -1,0 +1,37 @@
+class Solution:
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        # Defensive: avoid division by zero if the driver ever passes 0 (denominator should not be 0 per constraints)
+        if denominator == 0:
+            raise ZeroDivisionError("denominator cannot be zero")
+
+        if numerator == 0:
+            return "0"
+
+        sign = "-" if (numerator < 0) ^ (denominator < 0) else ""
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+
+        integer_part = numerator // denominator
+        remainder = numerator % denominator
+
+        result = [sign + str(integer_part)]
+        if remainder == 0:
+            return "".join(result)
+
+        result.append(".")
+        remainder_map = {}
+
+        while remainder != 0:
+            if remainder in remainder_map:
+                idx = remainder_map[remainder]
+                result.insert(idx, "(")
+                result.append(")")
+                break
+
+            remainder_map[remainder] = len(result)
+            remainder *= 10
+            digit = remainder // denominator
+            result.append(str(digit))
+            remainder %= denominator
+
+        return "".join(result)
